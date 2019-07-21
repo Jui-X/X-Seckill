@@ -1,4 +1,4 @@
-package com.juix.seckill.utils;
+package com.juix.seckill.utils.key;
 
 /**
  * @param: none
@@ -12,7 +12,7 @@ public abstract class BasePrefix implements KeyPrefix {
 
     private String prefix;
 
-    public BasePrefix( String prefix) {
+    public BasePrefix(String prefix) {
         this(0, prefix);
     }
 

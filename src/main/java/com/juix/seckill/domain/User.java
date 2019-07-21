@@ -1,4 +1,4 @@
-package com.juix.seckill.dto;
+package com.juix.seckill.domain;
 
 import lombok.Data;
 

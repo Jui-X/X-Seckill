@@ -1,4 +1,4 @@
-package com.juix.seckill.utils;
+package com.juix.seckill.utils.key;
 
 public interface KeyPrefix {
 
