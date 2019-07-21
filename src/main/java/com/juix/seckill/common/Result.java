@@ -1,6 +1,6 @@
 package com.juix.seckill.common;
 
-import com.juix.seckill.enums.Enums;
+import com.juix.seckill.enums.ServerEnums;
 import lombok.Data;
 
 /**
@@ -41,7 +41,7 @@ public class Result<T> {
      * @return
      */
     public static Result errorMsg() {
-        return new Result(Enums.SERVER_ERROR.getCode(), Enums.SERVER_ERROR.getMsg(), null);
+        return new Result(ServerEnums.SERVER_ERROR.getCode(), ServerEnums.SERVER_ERROR.getMsg(), null);
     }
 
     /**
@@ -51,7 +51,7 @@ public class Result<T> {
      * @return
      */
     public static <T> Result errorMap(T data) {
-        return new Result(Enums.SERVER_NOT_IMPLEMENTED.getCode(), Enums.SERVER_NOT_IMPLEMENTED.getMsg(), data);
+        return new Result(ServerEnums.SERVER_NOT_IMPLEMENTED.getCode(), ServerEnums.SERVER_NOT_IMPLEMENTED.getMsg(), data);
     }
 
     /**
@@ -60,7 +60,7 @@ public class Result<T> {
      * @return
      */
     public static Result errorUnavailable() {
-        return new Result(Enums.SERVER_UNAVAILABLE.getCode(), Enums.SERVER_UNAVAILABLE.getMsg(), null);
+        return new Result(ServerEnums.SERVER_UNAVAILABLE.getCode(), ServerEnums.SERVER_UNAVAILABLE.getMsg(), null);
     }
 
     /**
@@ -69,7 +69,7 @@ public class Result<T> {
      * @return
      */
     public static Result errorException(String msg) {
-        return new Result(Enums.SERVER_EXCEPTION.getCode(), msg, null);
+        return new Result(ServerEnums.SERVER_EXCEPTION.getCode(), msg, null);
     }
 
 
@@ -80,8 +80,8 @@ public class Result<T> {
     }
 
     private Result(T data) {
-        this.status = Enums.SUCCESS.getCode();
-        this.msg = Enums.SUCCESS.getMsg();
+        this.status = ServerEnums.SUCCESS.getCode();
+        this.msg = ServerEnums.SUCCESS.getMsg();
         this.data = data;
     }
 }

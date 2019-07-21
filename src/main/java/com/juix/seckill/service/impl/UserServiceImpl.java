@@ -1,7 +1,8 @@
 package com.juix.seckill.service.impl;
 
+import com.juix.seckill.dao.UserDao;
 import com.juix.seckill.domain.User;
-import com.juix.seckill.enums.Enums;
+import com.juix.seckill.enums.ServerEnums;
 import com.juix.seckill.exception.GlobalException;
 import com.juix.seckill.service.UserService;
 import com.juix.seckill.utils.MD5Util;
@@ -28,12 +29,15 @@ public class UserServiceImpl implements UserService {
     public static final String COOKIE_NAME = "token";
 
     @Autowired
+    UserDao userDao;
+
+    @Autowired
     RedisService redisService;
 
     @Override
     public boolean signIn(HttpServletResponse response, UserVo userVo) {
         if (userVo == null) {
-            throw new GlobalException(Enums.SERVER_ERROR);
+            throw new GlobalException(ServerEnums.SERVER_ERROR);
         }
 
         String phoneNum = userVo.getPhoneNumber();
@@ -41,13 +45,13 @@ public class UserServiceImpl implements UserService {
 
         User currentUser = getUserByPhoneNumber(phoneNum);
         if (currentUser == null) {
-            throw new GlobalException(Enums.PHONE_NUMBER_NOT_EXIST);
+            throw new GlobalException(ServerEnums.PHONE_NUMBER_NOT_EXIST);
         }
         String dbPass = currentUser.getPassword();
         String salt = currentUser.getSalt();
         String password = MD5Util.formPassToDBPass(formPass, salt);
         if (!password.equals(dbPass)) {
-            throw new GlobalException(Enums.PASSWORD_ERROR);
+            throw new GlobalException(ServerEnums.PASSWORD_ERROR);
         }
 
         String token = UUIDUtil.uuid();
@@ -57,7 +61,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private User getUserByPhoneNumber(String phoneNum) {
-        return new User();
+        return userDao.getUserByPhoneNumber(Long.valueOf(phoneNum));
     }
 
     private void generateCookie(HttpServletResponse response, String token, User user) {

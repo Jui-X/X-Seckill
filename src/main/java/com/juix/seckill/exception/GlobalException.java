@@ -1,6 +1,6 @@
 package com.juix.seckill.exception;
 
-import com.juix.seckill.enums.Enums;
+import com.juix.seckill.enums.ServerEnums;
 import lombok.Getter;
 
 /**
@@ -13,9 +13,9 @@ import lombok.Getter;
 public class GlobalException extends RuntimeException {
     private static final long serialVersionUID = -972110861333619813L;
 
-    private Enums status;
+    private ServerEnums status;
 
-    public GlobalException(Enums status) {
+    public GlobalException(ServerEnums status) {
         super(status.getMsg());
         this.status = status;
     }

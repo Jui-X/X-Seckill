@@ -3,7 +3,7 @@ package com.juix.seckill.enums;
 import lombok.Getter;
 
 @Getter
-public enum Enums {
+public enum ServerEnums {
     SUCCESS(200, "登陆成功"),
     SERVER_ERROR(500, "服务器内部异常"),
     SERVER_NOT_IMPLEMENTED(501, "不支持的请求"),
@@ -17,7 +17,7 @@ public enum Enums {
     private int code;
     private String msg;
 
-    Enums(int code, String msg) {
+    ServerEnums(int code, String msg) {
         this.code = code;
         this.msg = msg;
     }

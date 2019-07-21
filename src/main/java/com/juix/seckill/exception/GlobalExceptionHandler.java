@@ -1,7 +1,7 @@
 package com.juix.seckill.exception;
 
 import com.juix.seckill.common.Result;
-import com.juix.seckill.enums.Enums;
+import com.juix.seckill.enums.ServerEnums;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
             BindException ex = (BindException) e;
             List<ObjectError> errors = ex.getAllErrors();
             ObjectError error = errors.get(0);
-            String msg = Enums.SERVER_PARAMETER_ERROR.fillParameter(Enums.SERVER_PARAMETER_ERROR.getMsg(), error.getDefaultMessage());
+            String msg = ServerEnums.SERVER_PARAMETER_ERROR.fillParameter(ServerEnums.SERVER_PARAMETER_ERROR.getMsg(), error.getDefaultMessage());
             return Result.errorException(msg);
         } else {
             return Result.errorMsg();

@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * @param: none
- * @description: 用于预处理参数
+ * @description: 用于预处理传入参数
  * @author: KingJ
  * @create: 2019-07-21 21:38
  **/
