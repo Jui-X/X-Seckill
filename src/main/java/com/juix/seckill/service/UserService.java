@@ -8,6 +8,10 @@ import javax.validation.Valid;
 
 public interface UserService {
 
+    User getUserByID(long id);
+
+    boolean updatePassword(long id, String newPassword, String token);
+
     boolean signIn(HttpServletResponse response, @Valid UserVo userVo);
 
     User getUserByToken(HttpServletResponse response, String token);

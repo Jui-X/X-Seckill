@@ -6,6 +6,9 @@ import com.juix.seckill.domain.User;
 import com.juix.seckill.vo.GoodsVo;
 
 public interface OrderService {
+
+    OrderInfo getOrderByUserID(long orderID);
+
     SecKillOrder getSecKillOrderByUserAndGood(Long userID, long goodsID);
 
     OrderInfo createOrder(User user, GoodsVo good);

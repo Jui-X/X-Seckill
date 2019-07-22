@@ -7,6 +7,9 @@ import org.apache.ibatis.annotations.*;
 @Mapper
 public interface OrderDao {
 
+    @Select("SELECT * FROM order WHERE order_id = #{orderID}")
+    OrderInfo getOrderByID(@Param("orderID") long orderID);
+
     @Select("SELECT * FROM secKill_order WHERE user_id = #{userId} AND goods_id = #{goodsId}")
     SecKillOrder getSecKillOrderByUserAndGoods(@Param("userId")long userID, @Param("goodsId")long goodsID);
 

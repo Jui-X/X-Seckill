@@ -11,6 +11,7 @@ import com.juix.seckill.service.UserService;
 import com.juix.seckill.utils.RedisService;
 import com.juix.seckill.vo.GoodsVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,7 +41,8 @@ public class SecKillController {
     @Autowired
     SecKillService secKillService;
 
-    public Result<GoodsVo> list(User user, @RequestParam("goodsID")long goodsID){
+    @PostMapping("/secKill")
+    public Result<OrderInfo> secKill(User user, @RequestParam("goodsID")long goodsID){
         if (user == null) {
             return Result.errorException("用户尚未登录！请先登录或注册～");
         }
@@ -59,7 +61,7 @@ public class SecKillController {
         // 减库存 下订单 写入秒杀订单
         OrderInfo orderInfo = secKillService.secKillGoods(user, good);
 
-        return Result.ok();
+        return Result.ok(orderInfo);
     }
 
 }

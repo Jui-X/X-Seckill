@@ -35,6 +35,45 @@ public class UserServiceImpl implements UserService {
     RedisService redisService;
 
     @Override
+    public User getUserByID(long id) {
+        // 首先从缓存中取出
+        User user = redisService.get(TokenKey.getUserByID, "" + id, User.class);
+
+        if (user != null) {
+            return user;
+        }
+
+        // 没有则从数据库取出，然后存入Redis缓存中
+        user = userDao.getUserByUserID(id);
+        if (user != null) {
+            redisService.set(TokenKey.getUserByID, "" + id, user);
+        }
+
+        return user;
+    }
+
+    @Override
+    public boolean updatePassword(long id, String newPassword, String token) {
+        // 从Redis缓存中取出
+        User user = getUserByID(id);
+        if (user == null) {
+            throw new GlobalException(ServerEnums.PHONE_NUMBER_NOT_EXIST);
+        }
+        // 更新数据库
+        // 新建对象以保证修改哪个字段就更新哪个字段，优化性能
+        User userToUpdate = new User();
+        userToUpdate.setId(id);
+        userToUpdate.setPassword(MD5Util.formPassToDBPass(newPassword, user.getSalt()));
+        userDao.updatePassword(userToUpdate);
+        // 处理缓存
+        user.setPassword(userToUpdate.getPassword());
+        redisService.delete(TokenKey.getUserByID, "" + id);
+        redisService.set(TokenKey.getToken, "" + token, user);
+
+        return true;
+    }
+
+    @Override
     public boolean signIn(HttpServletResponse response, UserVo userVo) {
         if (userVo == null) {
             throw new GlobalException(ServerEnums.SERVER_ERROR);
@@ -60,11 +99,11 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
-    private User getUserByPhoneNumber(String phoneNum) {
+    public User getUserByPhoneNumber(String phoneNum) {
         return userDao.getUserByPhoneNumber(Long.valueOf(phoneNum));
     }
 
-    private void generateCookie(HttpServletResponse response, String token, User user) {
+    public void generateCookie(HttpServletResponse response, String token, User user) {
         redisService.set(TokenKey.getToken, token, user);
         Cookie cookie = new Cookie(COOKIE_NAME, token);
         cookie.setMaxAge(TokenKey.getToken.expireSeconds());

@@ -6,6 +6,8 @@ import com.juix.seckill.domain.SecKillOrder;
 import com.juix.seckill.domain.User;
 import com.juix.seckill.enums.OrderEnums;
 import com.juix.seckill.service.OrderService;
+import com.juix.seckill.utils.RedisService;
+import com.juix.seckill.utils.key.OrderKey;
 import com.juix.seckill.vo.GoodsVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,8 +27,22 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     OrderDao orderDao;
 
+    @Autowired
+    RedisService redisService;
+
+    @Override
+    public OrderInfo getOrderByUserID(long orderID) {
+
+        return orderDao.getOrderByID(orderID);
+    }
+
     @Override
     public SecKillOrder getSecKillOrderByUserAndGood(Long userID, long goodsID) {
+        SecKillOrder secKillOrder = redisService.get(OrderKey.getSecKillOrderByUserAndGood, "" + userID + "_" + goodsID, SecKillOrder.class);
+        if (secKillOrder != null) {
+            return secKillOrder;
+        }
+
         return orderDao.getSecKillOrderByUserAndGoods(userID, goodsID);
     }
 
@@ -52,6 +68,8 @@ public class OrderServiceImpl implements OrderService {
         secKillOrder.setOrderId(orderID);
 
         orderDao.insertSecKillOrder(secKillOrder);
+
+        redisService.set(OrderKey.getSecKillOrderByUserAndGood, "" + user.getId() + "_" + good.getId(), secKillOrder);
 
         return order;
     }

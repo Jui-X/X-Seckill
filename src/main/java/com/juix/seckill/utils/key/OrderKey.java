@@ -7,7 +7,9 @@ package com.juix.seckill.utils.key;
  * @create: 2019-07-20 21:34
  **/
 public class OrderKey extends BasePrefix {
-    public OrderKey(int expireSeconds, String prefix) {
-        super(expireSeconds, prefix);
+    public OrderKey(String prefix) {
+        super(prefix);
     }
+
+    public static OrderKey getSecKillOrderByUserAndGood = new OrderKey("secKill");
 }

@@ -14,4 +14,5 @@ public class TokenKey extends BasePrefix {
     }
 
     public static TokenKey getToken = new TokenKey("token", TOKEN_EXPIRE);
+    public static TokenKey getUserByID = new TokenKey("id", 0);
 }

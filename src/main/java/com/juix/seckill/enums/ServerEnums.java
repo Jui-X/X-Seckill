@@ -10,8 +10,12 @@ public enum ServerEnums {
     SERVER_UNAVAILABLE(503, "服务不可用"),
     SERVER_EXCEPTION(555, "服务器内部自定义异常"),
     SERVER_PARAMETER_ERROR(601, "参数校验异常: %s"),
-    PHONE_NUMBER_NOT_EXIST(602, "当前手机号为注册！"),
-    PASSWORD_ERROR(603, "当前账号或密码错误！")
+    PHONE_NUMBER_NOT_EXIST(602, "当前手机号未注册！"),
+    PASSWORD_EMPTY(603, "密码不能为空！"),
+    SESSION_ERROR(604, "当前用户会话已失效！"),
+    PASSWORD_ERROR(605, "当前账号或密码错误！"),
+    ORDER_NOT_EXIST(606, "订单不存在！"),
+
     ;
 
     private int code;
