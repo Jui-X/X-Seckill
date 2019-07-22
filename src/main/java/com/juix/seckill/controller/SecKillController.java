@@ -1,7 +1,8 @@
 package com.juix.seckill.controller;
 
 import com.juix.seckill.common.Result;
-import com.juix.seckill.domain.SecKillGoods;
+import com.juix.seckill.domain.OrderInfo;
+import com.juix.seckill.domain.SecKillOrder;
 import com.juix.seckill.domain.User;
 import com.juix.seckill.service.GoodsService;
 import com.juix.seckill.service.OrderService;
@@ -50,12 +51,15 @@ public class SecKillController {
             return Result.errorException("当前秒杀商品库存不足～");
         }
 
-        SecKillGoods secKillOrder = orderService.getSecKillOrderByUserAndGood(user.getId(), goodsID);
+        SecKillOrder secKillOrder = orderService.getSecKillOrderByUserAndGood(user.getId(), goodsID);
         if (secKillOrder != null) {
             return Result.errorException("已抢购过此商品，不能再次抢购~");
         }
 
         // 减库存 下订单 写入秒杀订单
+        OrderInfo orderInfo = secKillService.secKillGoods(user, good);
+
+        return Result.ok();
     }
 
 }

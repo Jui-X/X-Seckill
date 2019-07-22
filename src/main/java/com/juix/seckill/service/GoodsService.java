@@ -9,4 +9,6 @@ public interface GoodsService {
     List<GoodsVo> listGoodsVo();
 
     GoodsVo getGoodsVoByGoodsID(long goodsID);
+
+    void reduceStock(GoodsVo good);
 }
