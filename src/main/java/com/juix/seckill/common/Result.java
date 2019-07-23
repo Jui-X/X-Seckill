@@ -40,8 +40,8 @@ public class Result<T> {
      * 服务器内部错误
      * @return
      */
-    public static Result errorMsg() {
-        return new Result(ServerEnums.SERVER_ERROR.getCode(), ServerEnums.SERVER_ERROR.getMsg(), null);
+    public static Result errorMsg(String msg) {
+        return new Result(ServerEnums.SERVER_ERROR.getCode(), msg, null);
     }
 
     /**

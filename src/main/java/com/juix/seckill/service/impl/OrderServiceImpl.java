@@ -60,15 +60,16 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderChannel(1);
         order.setCreateDate(new Date());
 
-        long orderID = orderDao.insertOrder(order);
+        orderDao.insertOrder(order);
 
         SecKillOrder secKillOrder = new SecKillOrder();
         secKillOrder.setUserId(user.getId());
         secKillOrder.setGoodsId(good.getId());
-        secKillOrder.setOrderId(orderID);
+        secKillOrder.setOrderId(order.getId());
 
         orderDao.insertSecKillOrder(secKillOrder);
 
+        // 写入Redis
         redisService.set(OrderKey.getSecKillOrderByUserAndGood, "" + user.getId() + "_" + good.getId(), secKillOrder);
 
         return order;

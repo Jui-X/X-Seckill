@@ -69,50 +69,6 @@ public class GoodsController {
         return Result.ok(goodsList);
     }
 
-    @RequestMapping(value = "/detail2/{goodsID}", produces="text/html")
-    public <T> Result<T> detail2(HttpServletRequest request, HttpServletResponse response, Model model,
-                                  User user, @PathVariable("goodsID") long goodsID) {
-        // 页面缓存
-        String html = redisService.get(GoodsKey.getGoodsList, "" + goodsID, String.class);
-        if (!StringUtils.isEmpty(html)) {
-            return Result.ok(html);
-        }
-
-        GoodsVo good = goodsService.getGoodsVoByGoodsID(goodsID);
-
-        long startAt = good.getStartDate().getTime();
-        long endAt = good.getEndDate().getTime();
-        long now = System.currentTimeMillis();
-
-        int secKillStatus = 0;
-        int remainSeconds = 0;
-        if (now < startAt) {
-            // 秒杀尚未开始...
-            secKillStatus = SecKillGoodsEnums.SECKILL_NOT_START.getCode();
-            remainSeconds = (int) (now - startAt);
-        } else if (now > endAt) {
-            // 秒杀已经结束
-            secKillStatus = SecKillGoodsEnums.SECKILL_END.getCode();
-            remainSeconds = -1;
-        } else {
-            // 秒杀进行中
-            secKillStatus = SecKillGoodsEnums.SECKILL_LASTING.getCode();
-            remainSeconds = 0;
-        }
-        good.setSecKillStatus(secKillStatus);
-        good.setRemainSeconds(remainSeconds);
-
-        SpringWebContext ctx = new SpringWebContext(request, response, request.getServletContext(), request.getLocale(),
-                model.asMap(), applicationContext);
-        // 手动渲染
-        html = thymeleafViewResolver.getTemplateEngine().process("goods_detail", ctx);
-        if (!StringUtils.isEmpty(html)) {
-            redisService.set(GoodsKey.getGoodsDetail, "" + goodsID, html);
-        }
-
-        return Result.ok(html);
-    }
-
     @RequestMapping(value = "/detail/{goodsID}", produces="text/html")
     public Result<GoodsDetailVo> detail(HttpServletRequest request, HttpServletResponse response, Model model,
                                         User user, @PathVariable("goodsID") long goodsID) {

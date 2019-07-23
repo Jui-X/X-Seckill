@@ -7,8 +7,6 @@ import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static com.juix.seckill.rabbitmq.MQConfig.QUEUE;
-
 /**
  * @param: none
  * @description:
@@ -23,9 +21,37 @@ public class MQSender {
     @Autowired
     AmqpTemplate amqpTemplate;
 
-    public <T> void sender(T message) {
+    public void sendSecKillOrderInfo(SecKillOrderInfo orderInfo) {
+        String msg = RedisService.POJOToString(orderInfo);
+        log.info("Send SecKill Queue msg: " + msg);
+        amqpTemplate.convertAndSend(MQConfig.SEC_KILL_QUEUE, msg);
+    }
+
+
+    /*public <T> void sender(T message) {
         String msg = RedisService.POJOToString(message);
         log.info("Send Queue msg: " + msg);
-        amqpTemplate.convertAndSend(QUEUE, msg);
+        amqpTemplate.convertAndSend(MQConfig.QUEUE, msg);
     }
+
+    public <T> void sendTopic(T message) {
+        String msg = RedisService.POJOToString(message);
+        log.info("Send Topic Queue msg: " + msg);
+        amqpTemplate.convertAndSend(MQConfig.TOPIC_EXCHANGE, "topic.key", msg);
+    }
+
+    public <T> void sendFanout(T message) {
+        String msg = RedisService.POJOToString(message);
+        log.info("Send Fanout Queue msg: " + msg);
+        amqpTemplate.convertAndSend(MQConfig.FANOUT_EXCHANGE, "", msg);
+    }
+
+    public <T> void sendHeader(T message) {
+        String msg = RedisService.POJOToString(message);
+        log.info("Send Header Queue msg: " + msg);
+        MessageProperties properties = new MessageProperties();
+        properties.setHeader("header", "value");
+        Message obj = new Message(msg.getBytes(), properties);
+        amqpTemplate.convertAndSend(MQConfig.HEADERS_EXCHANGE, "", msg);
+    }*/
 }

@@ -9,13 +9,17 @@ public enum ServerEnums {
     SERVER_NOT_IMPLEMENTED(501, "不支持的请求"),
     SERVER_UNAVAILABLE(503, "服务不可用"),
     SERVER_EXCEPTION(555, "服务器内部自定义异常"),
-    SERVER_PARAMETER_ERROR(601, "参数校验异常: %s"),
-    PHONE_NUMBER_NOT_EXIST(602, "当前手机号未注册！"),
-    PASSWORD_EMPTY(603, "密码不能为空！"),
-    SESSION_ERROR(604, "当前用户会话已失效！"),
-    PASSWORD_ERROR(605, "当前账号或密码错误！"),
-    ORDER_NOT_EXIST(606, "订单不存在！"),
-
+    REQUEST_ILLEGAL(600, "当前请求非法！"),
+    ACCESS_LIMITED(601, "请求过于频繁！"),
+    SERVER_PARAMETER_ERROR(602, "参数校验异常: %s"),
+    PHONE_NUMBER_NOT_EXIST(603, "当前手机号未注册！"),
+    PASSWORD_EMPTY(604, "密码不能为空！"),
+    SESSION_ERROR(605, "当前用户会话已失效！"),
+    PASSWORD_ERROR(606, "当前账号或密码错误！"),
+    ORDER_NOT_EXIST(607, "订单不存在！"),
+    SEC_KILL_SUCCEED(608, "秒杀成功～"),
+    SEC_KILL_END(609, "当前秒杀活动已结束"),
+    SEC_KILL_AGAIN(610, "已抢购过此商品，不能再次抢购~"),
     ;
 
     private int code;
