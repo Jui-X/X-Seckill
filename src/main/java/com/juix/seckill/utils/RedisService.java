@@ -37,7 +37,7 @@ public class RedisService {
         }
     }
 
-    private <T> T stringToPOJO(String str, Class<T> clazz) {
+    public static <T> T stringToPOJO(String str, Class<T> clazz) {
         if (str == null || str.length() <= 0 || clazz == null) {
             return null;
         }
@@ -74,7 +74,7 @@ public class RedisService {
         }
     }
 
-    private <T> String POJOToString(T value) {
+    public static <T> String POJOToString(T value) {
         if (value == null) {
             return null;
         }
