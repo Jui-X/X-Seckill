@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class MQSender {
 
-    private static Logger log = LoggerFactory.getLogger(MQReceiver.class);
+    private static Logger log = LoggerFactory.getLogger(MQSender.class);
 
     @Autowired
     AmqpTemplate amqpTemplate;

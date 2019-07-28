@@ -17,9 +17,11 @@ public enum ServerEnums {
     SESSION_ERROR(605, "当前用户会话已失效！"),
     PASSWORD_ERROR(606, "当前账号或密码错误！"),
     ORDER_NOT_EXIST(607, "订单不存在！"),
-    SEC_KILL_SUCCEED(608, "秒杀成功～"),
-    SEC_KILL_END(609, "当前秒杀活动已结束"),
-    SEC_KILL_AGAIN(610, "已抢购过此商品，不能再次抢购~"),
+    HANDLING(608, "秒杀订单处理中...请稍后"),
+    SEC_KILL_SUCCEED(609, "秒杀成功～"),
+    SEC_KILL_RATE_LIMIT(610, "秒杀活动过热，请重试"),
+    SEC_KILL_AGAIN(611, "已抢购过此商品，不能再次抢购~"),
+    SEC_KILL_END(612, "当前秒杀活动已结束"),
     ;
 
     private int code;

@@ -68,6 +68,12 @@ public class SecKillServiceImpl implements SecKillService {
         }
     }
 
+    /**
+     * 隐藏秒杀接口
+     * @param user
+     * @param goodsID
+     * @return
+     */
     @Override
     public String createSecKillPath(User user, long goodsID) {
         if (user == null || goodsID <= 0) {
@@ -80,6 +86,13 @@ public class SecKillServiceImpl implements SecKillService {
         return str;
     }
 
+    /**
+     * 秒杀接口令牌校验
+     * @param user
+     * @param goodsID
+     * @param path
+     * @return
+     */
     @Override
     public boolean checkPath(User user, long goodsID, String path) {
         if (user == null || path == null) {

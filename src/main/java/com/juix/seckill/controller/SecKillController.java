@@ -1,5 +1,6 @@
 package com.juix.seckill.controller;
 
+import com.google.common.util.concurrent.RateLimiter;
 import com.juix.seckill.access.AccessLimit;
 import com.juix.seckill.common.Result;
 import com.juix.seckill.domain.OrderInfo;
@@ -51,6 +52,8 @@ public class SecKillController implements InitializingBean {
     @Autowired
     MQSender mqSender;
 
+    private RateLimiter secKillRateLimiter;
+
     private ConcurrentHashMap<Long, Boolean> secKillEndMap = new ConcurrentHashMap<>();
 
     /**
@@ -69,6 +72,8 @@ public class SecKillController implements InitializingBean {
             redisService.set(GoodsKey.getSecKillGoodStock, "" + goods.getId(), goods.getStockCount());
             secKillEndMap.put(goods.getId(), false);
         }
+
+        secKillRateLimiter = RateLimiter.create(300);
     }
 
     @PostMapping("/{path}/secKill")
@@ -84,6 +89,7 @@ public class SecKillController implements InitializingBean {
         }
 
         // 内存标记
+        // 用HashMap以商品ID为键，商品库存是否小于0为值，以内存对象为缓存减少缓存数据库压力
         Boolean end = secKillEndMap.get(goodsID);
         if (end) {
             return Result.errorException(ServerEnums.SEC_KILL_END.getMsg());
@@ -96,6 +102,7 @@ public class SecKillController implements InitializingBean {
             return Result.errorException(ServerEnums.SEC_KILL_END.getMsg());
         }
 
+        // 查询秒杀订单 判断是否已经秒杀到商品
         SecKillOrder secKillOrder = orderService.getSecKillOrderByUserAndGood(user.getId(), goodsID);
         if (secKillOrder != null) {
             return Result.errorException(ServerEnums.SEC_KILL_AGAIN.getMsg());
@@ -104,8 +111,10 @@ public class SecKillController implements InitializingBean {
         SecKillOrderInfo orderInfo = new SecKillOrderInfo();
         orderInfo.setGoodsId(goodsID);
         orderInfo.setUser(user);
+        // 入队
+        mqSender.sendSecKillOrderInfo(orderInfo);
 
-        return Result.ok(ServerEnums.SEC_KILL_SUCCEED.getMsg());
+        return Result.ok(ServerEnums.HANDLING.getMsg());
 
         /*GoodsVo good = goodsService.getGoodsVoByGoodsID(goodsID);
         int stock = good.getStockCount();
@@ -143,6 +152,10 @@ public class SecKillController implements InitializingBean {
     @AccessLimit(seconds = 5, maxCount = 5, needLogin = true)
     @GetMapping("/secKillResult")
     public Result<String> getSecKillPath(HttpServletRequest request, User user, @RequestParam("goodsID") long goodsID) {
+        if (secKillRateLimiter.acquire() <= 0) {
+            return Result.errorException(ServerEnums.SEC_KILL_RATE_LIMIT.getMsg());
+        }
+
         if (user == null) {
             return Result.errorException(ServerEnums.SESSION_ERROR.getMsg());
         }

@@ -47,6 +47,8 @@ public class MQReceiver {
             return;
         }
 
+        // 确认数据库中是否有唯一订单
+        // 也可以通过唯一索引来实现
         SecKillOrder secKillOrder = orderService.getSecKillOrderByUserAndGood(user.getId(), goodsID);
         if (secKillOrder != null) {
             return;

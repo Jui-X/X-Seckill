@@ -69,7 +69,8 @@ public class OrderServiceImpl implements OrderService {
 
         orderDao.insertSecKillOrder(secKillOrder);
 
-        // 写入Redis
+        // 写入Redis缓存中
+        // 秒杀订单落库后写入Redis，通过缓存方式缓解数据库压力
         redisService.set(OrderKey.getSecKillOrderByUserAndGood, "" + user.getId() + "_" + good.getId(), secKillOrder);
 
         return order;
