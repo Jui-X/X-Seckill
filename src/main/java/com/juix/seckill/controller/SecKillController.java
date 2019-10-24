@@ -149,6 +149,13 @@ public class SecKillController implements InitializingBean {
         return Result.ok(result);
     }
 
+    /**
+     * 获取秒杀接口路径
+     * @param request
+     * @param user
+     * @param goodsID
+     * @return
+     */
     @AccessLimit(seconds = 5, maxCount = 5, needLogin = true)
     @GetMapping("/secKillResult")
     public Result<String> getSecKillPath(HttpServletRequest request, User user, @RequestParam("goodsID") long goodsID) {
